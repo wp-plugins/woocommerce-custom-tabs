@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 class WCT_Admin_Page {
 	
