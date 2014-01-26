@@ -4,7 +4,7 @@ Donate link: http://webshoplogic.com/donation-woocommerce-custom-tabs/
 Tags: Product tab, Woocommerce product tabs, Custom tab, WooCommerce
 Requires at least: 3.7
 Tested up to: 3.8.1
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Custom product tab pages can be added to WooCommerce products using this plugin. 
@@ -13,11 +13,9 @@ Custom product tab pages can be added to WooCommerce products using this plugin.
 
 As a good shop owner, you may want to publish more information about your products. This plugin will help you displaying product details in separate tab pages. Even shortcodes may be used to display galleries, product support forums (e. g. bbpress) and statistics. Some functions available in Pro version.
 
-Author website: http://webshoplogic.com/
-
 = Features =
 * Easy tab content handling
-* Wysiwyg editor
+* Native WordPress Wysiwyg editor for editing custom content
 * Tab page positioning (priority)
 * Hide empty tabs
 * Includes .mo and .po files for localization
@@ -29,6 +27,7 @@ Author website: http://webshoplogic.com/
 * Possibility of using shortcode
 
 Pro version Plugin Page: http://webshoplogic.com/product/woocommerce-custom-tabs-pro/
+Author website: http://webshoplogic.com/
 
 Banner picture background: Pop-tab mail by Simon Law is licensed under a Creative Commons Attribution 2.0 International License.
 Based on a work at http://www.flickr.com/photos/sfllaw/10856709/in/photostream/
