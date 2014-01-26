@@ -1,4 +1,7 @@
 <?php
+
+//lite version
+
 /*
 Plugin Name: Advanced Custom Fields: WP WYSIWYG
 Plugin URI: https://github.com/elliotcondon/acf-wordpress-wysiwyg-field
