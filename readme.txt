@@ -4,7 +4,7 @@ Donate link: http://webshoplogic.com/donation-woocommerce-custom-tabs/
 Tags: Product tab, Woocommerce product tabs, Custom tab, WooCommerce
 Requires at least: 3.7
 Tested up to: 3.8.1
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Custom product tab pages can be added to WooCommerce products using this plugin. 
@@ -19,12 +19,14 @@ As a good shop owner, you may want to publish more information about your produc
 * Tab page positioning (priority)
 * Hide empty tabs
 * Includes .mo and .po files for localization
+* Possibility of using shortcode
 
 = Pro Version =
 * Multiple tabs handling
 * Pre register tabs, this way you can make standardised tabs for a bunch of products 
 * Product category dependent tab pages
-* Possibility of using shortcode
+* More Actrions and Filters for customization
+
 
 Pro version Plugin Page: http://webshoplogic.com/product/woocommerce-custom-tabs-pro/
 Author website: http://webshoplogic.com/
@@ -57,10 +59,15 @@ Based on a work at http://www.flickr.com/photos/sfllaw/10856709/in/photostream/
 
 == Changelog ==
 
+= 1.0.4 =
+* fix: disable wordpress.org update for PRO version
+* Enable using of shortcodes in Lite version
+
+= 1.0.2 - 1.0.3 =
+* fix: sub-plugin header problem 
 
 = 1.0.0 =
 * First version
-
 
 == Upgrade Notice ==
 

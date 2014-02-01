@@ -3,7 +3,7 @@
 Plugin Name: Woocommerce Custom Tabs
 Plugin URI: http://webshoplogic.com/product/woocommerce-custom-tabs-lite/
 Description: Custom product tab pages can be added to WooCommerce products using this plugin.  
-Version: 1.0.3
+Version: 1.0.4
 Author: WebshopLogic
 Author URI: http://webshoplogic.com/
 License: GPLv2 or later
@@ -31,6 +31,9 @@ class WCT {
 		add_action( 'init', array( $this, 'init' ), 0 );
 		
 		//register_activation_hook( __FILE__, array( $this, 'wct_activation' ) );
+		
+		if ($is_premium) //disable auto update from wordpress.org
+			add_filter( 'site_transient_update_plugins', array($this, 'filter_plugin_updates' ));
 		
 		$options = get_option( 'wct_general_settings' );
 		
@@ -200,7 +203,8 @@ class WCT {
 		//global $post; echo get_post_meta($post->ID, $tab_code, true);
 		//echo do_shortcode($field_object['value']);
 		
-		$tab_content = $field_object['value'];
+		$tab_content = apply_filters('the_content', $field_object['value'] ); //process shortcodes
+		
 		echo $tab_content;
 		
 	}
@@ -219,16 +223,16 @@ class WCT {
 				'labels' => array(
 					'name' => __( 'Product tabs', 'wct' ) . ($is_premium ? '' : (' ' . __('TEST', 'wct'))),
 					'singular_name' => __( 'Product tab', 'wct') . ($is_premium ? '' : (' ' . __('TEST', 'wct'))),
-	'add_new'            => __( 'Add New', 'wct' ),
-    'add_new_item'       => __( 'Add New Product Tab Type', 'wct' ),
-    'edit_item'          => __( 'Edit Product Tab Type', 'wct' ),
-    'new_item'           => __( 'New Product Tab Type', 'wct' ),
-    'all_items'          => __( 'All Product Tab Type', 'wct' ),
-    'view_item'          => __( 'View Product Tab Type', 'wct' ),
-    'search_items'       => __( 'Search Product Tab Type', 'wct' ),
-    'not_found'          => __( 'No product tab types found', 'wct' ),
-    'not_found_in_trash' => __( 'No product tab type found in Trash', 'wct' ),
-    'parent_item_colon'  => '',
+					'add_new'            => __( 'Add New', 'wct' ),
+				    'add_new_item'       => __( 'Add New Product Tab Type', 'wct' ),
+				    'edit_item'          => __( 'Edit Product Tab Type', 'wct' ),
+				    'new_item'           => __( 'New Product Tab Type', 'wct' ),
+				    'all_items'          => __( 'All Product Tab Type', 'wct' ),
+				    'view_item'          => __( 'View Product Tab Type', 'wct' ),
+				    'search_items'       => __( 'Search Product Tab Type', 'wct' ),
+				    'not_found'          => __( 'No product tab types found', 'wct' ),
+				    'not_found_in_trash' => __( 'No product tab type found in Trash', 'wct' ),
+				    'parent_item_colon'  => '',
     					
 				),
 			'public' => true,
@@ -463,6 +467,13 @@ class WCT {
 		if ( $this->plugin_url ) return $this->plugin_url;
 		return $this->plugin_url = untrailingslashit( plugins_url( '/', __FILE__ ) );
 	}
+
+	//disable plugin update notice (in PRO)
+	function filter_plugin_updates( $value ) {
+	    unset($value->response[ plugin_basename(__FILE__) ]);
+	    return $value;
+	}	
+
 
 }
 

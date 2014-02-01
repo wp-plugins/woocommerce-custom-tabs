@@ -3,8 +3,10 @@
 class WCT_Admin_Page {
 	
 	function __construct() {
+		
 		add_action( 'admin_menu', array($this, 'wct_admin_menu') ) ;
-		add_action( 'admin_init', array($this, 'wct_admin_init') );		
+		add_action( 'admin_init', array($this, 'wct_admin_init') );
+		
 	}		
 
 	function wct_admin_menu () {
@@ -105,7 +107,7 @@ class WCT_Admin_Page {
 	
 	function add_options_page_callback()
 	{
-		
+
 		global $is_premium;
 		
         //check if WooCommerce plugin is installed and active
