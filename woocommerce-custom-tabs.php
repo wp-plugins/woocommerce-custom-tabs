@@ -3,7 +3,7 @@
 Plugin Name: Woocommerce Custom Tabs
 Plugin URI: http://webshoplogic.com/product/woocommerce-custom-tabs-lite/
 Description: Custom product tab pages can be added to WooCommerce products using this plugin.  
-Version: 1.0.4
+Version: 1.0.5
 Author: WebshopLogic
 Author URI: http://webshoplogic.com/
 License: GPLv2 or later
@@ -96,9 +96,10 @@ class WCT {
 
 		$args = array(
 			'post_type' => 'product_tabpage',
+			'posts_per_page' => 1000,			
 			'meta_key'	=> 'priority',
 			'orderby'	=> 'meta_value_name',
-			'order'		=> 'ASC'			
+			'order'		=> 'ASC'
 		);
 
 		$product_tabpage_postslist_1 = get_posts( $args );
@@ -189,12 +190,11 @@ class WCT {
 			}
 
 		}
-				
 		return $tabs;
 	}
 
 	function woocommerce_tab_content($tab_code = 'common_tab') {
-			
+
 		//$tab_code is iqual field name of the current product post field name that is to be written to this tab page as content
 		
 		$codeproduct_array = get_post( null, OBJECT );
