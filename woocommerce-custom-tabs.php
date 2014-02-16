@@ -3,7 +3,7 @@
 Plugin Name: Woocommerce Custom Tabs
 Plugin URI: http://webshoplogic.com/product/woocommerce-custom-tabs-lite/
 Description: Custom product tab pages can be added to WooCommerce products using this plugin.  
-Version: 1.0.5
+Version: 1.0.6
 Author: WebshopLogic
 Author URI: http://webshoplogic.com/
 License: GPLv2 or later
@@ -106,9 +106,11 @@ class WCT {
 		
 		foreach ($product_tabpage_postslist_1 as $key => $product_tabpage_object) {
 
-			$use_for_all_products_field_object = get_field_object('use_for_all_products', $product_tabpage_object->ID);
+			//x$use_for_all_products_field_object = get_field_object('use_for_all_products', $product_tabpage_object->ID);
+			$use_for_all_products_field = get_field('use_for_all_products', $product_tabpage_object->ID, false);
 			
-			if (1 != $use_for_all_products_field_object['value']) {
+			//xif (1 != $use_for_all_products_field_object['value']) {
+			if (1 != $use_for_all_products_field) {				
 				//delete values from the array when use for all product is not swiched on
 				unset($product_tabpage_postslist_1[$key]); 
 			}
@@ -171,11 +173,13 @@ class WCT {
 		
 		$codeproduct_array = get_post( null, OBJECT );
 		
-		$tab_content_field_object = get_field_object('common_tab', $codeproduct_array->ID);
-		$tab_content = $tab_content_field_object['value'];
+		//x$tab_content_field_object = get_field_object('common_tab', $codeproduct_array->ID);
+		//x$tab_content = $tab_content_field_object['value'];
+		$tab_content = get_field('common_tab', $codeproduct_array->ID, false);
 		
-		$tab_custom_title_field_object = get_field_object('common_tab_tab_custom_title', $codeproduct_array->ID);
-		$tab_custom_title = $tab_custom_title_field_object['value'];
+		//x$tab_custom_title_field_object = get_field_object('common_tab_tab_custom_title', $codeproduct_array->ID);
+		//x$tab_custom_title = $tab_custom_title_field_object['value'];
+		$tab_custom_title = get_field('common_tab_tab_custom_title', $codeproduct_array->ID, false);
 
 		if ( !empty($tab_content) or 1 != $options['hide_empty_tabs'] ) {
 			
@@ -198,13 +202,9 @@ class WCT {
 		//$tab_code is iqual field name of the current product post field name that is to be written to this tab page as content
 		
 		$codeproduct_array = get_post( null, OBJECT );
-		$field_object = get_field_object($tab_code, $codeproduct_array->ID);
 		
-		//global $post; echo get_post_meta($post->ID, $tab_code, true);
-		//echo do_shortcode($field_object['value']);
-		
-		$tab_content = apply_filters('the_content', $field_object['value'] ); //process shortcodes
-		
+		$tab_content = get_field($tab_code, $codeproduct_array->ID, false);
+		$tab_content = apply_filters('the_content', $tab_content ); //process shortcodes
 		echo $tab_content;
 		
 	}
@@ -470,10 +470,10 @@ class WCT {
 
 	//disable plugin update notice (in PRO)
 	function filter_plugin_updates( $value ) {
-	    unset($value->response[ plugin_basename(__FILE__) ]);
+		if($value->response[ plugin_basename(__FILE__) ]) 
+			unset($value->response[ plugin_basename(__FILE__) ]);	    
 	    return $value;
 	}	
-
 
 }
 
