@@ -70,6 +70,13 @@ class WCT_Admin_Page {
 			'wct_general_section' // Section           
 		);
 
+		add_settings_field(
+			'enable_multiple_tabs_admin_test', // ID
+			__('Enable multiple tabpage administration test','wct'), // Title 
+			array($this, 'posttype_callback'), // Callback
+			'wct_general_settings', // Page / tab page
+			'wct_general_section' // Section           
+		);
 		}
 
 	function wct_set_defaults() {
@@ -77,11 +84,11 @@ class WCT_Admin_Page {
 		$options = get_option( 'wct_general_settings' ); 
 		
 		$options = wp_parse_args( $options, array(
-			'enable_product_category_dependent_tabs' => 1,
+			'enable_product_category_dependent_tabs' => 0,
 			'common_tabname' => '',
 			'common_tab_priority' => 30,
 			'hide_empty_tabs' => 0,
-			'enable_multiple_tabs_admin_test' => 0,
+			'enable_multiple_tabs_admin_test' => 1,
 		) );
 		update_option( 'wct_general_settings', $options );
 		

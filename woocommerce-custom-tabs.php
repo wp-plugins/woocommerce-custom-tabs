@@ -3,10 +3,10 @@
 Plugin Name: Woocommerce Custom Tabs
 Plugin URI: http://webshoplogic.com/product/woocommerce-custom-tabs-lite/
 Description: Custom product tab pages can be added to WooCommerce products using this plugin.  
-Version: 1.0.8 PRO
+Version: 1.0.8
 Author: WebshopLogic
 Author URI: http://webshoplogic.com/
-License: codecanyon Regular License - http://codecanyon.net/licenses/regular
+License: GPLv2 or later
 Text Domain: wct
 Requires at least: 3.7
 Tested up to: 3.9.1
@@ -25,7 +25,7 @@ class WCT {
 		
 		global $is_premium;
 			
-		$is_premium = TRUE;
+		$is_premium = FALSE;
 		include_once( 'wct-admin-page.php' );
 		
 		add_action( 'init', array( $this, 'init' ), 0 );
@@ -165,35 +165,6 @@ class WCT {
 		
 		$codeproduct_array = get_post( null, OBJECT );
 		
-		$product_tabpage_postslist = $this->get_actual_product_related_tab_page_objects();
-		
-		//Original WooCommerce tabs priority: Description - 10,  Additional Information - 20,  Reviews - 30
-		foreach ($product_tabpage_postslist as $product_tabpage_post) {
-
-			//x$tab_content_field_object = get_field_object($product_tabpage_post -> post_name, $codeproduct_array->ID);
-			//x$tab_content = $tab_content_field_object['value'];
-			$tab_content = get_field($product_tabpage_post -> post_name, $codeproduct_array->ID, false);
-			
-			//x$tab_custom_title_field_object = get_field_object($product_tabpage_post -> post_name . '_tab_custom_title', $codeproduct_array->ID);
-			//x$tab_custom_title = $tab_custom_title_field_object['value'];
-			$tab_custom_title = get_field($product_tabpage_post -> post_name . '_tab_custom_title', $codeproduct_array->ID, false);
-
-			if ( !empty($tab_content) or 1 != $options['hide_empty_tabs']) {
-	
-				//x$priority_field_object = get_field_object('priority', $product_tabpage_post->ID);
-				//x$priority = $priority_field_object['value'];
-				$priority = get_field('priority', $product_tabpage_post->ID, false);
-	
-				//callback is a dynamic function, it is call $this->woocommerce_tab_content function with $tab_code parameter 			
-				$tabs[ $product_tabpage_post -> post_name ] = array(
-				'title' 	=> $tab_custom_title == '' ? $product_tabpage_post -> post_title : $tab_custom_title,
-				'priority' 	=> $priority,
-				'callback' 	=> create_function('',  'global $wct; $wct->woocommerce_tab_content("' . $product_tabpage_post -> post_name . '");'  ),
-				);
-			}			
-			
-		}
-
 		//x$tab_content_field_object = get_field_object('common_tab', $codeproduct_array->ID);
 		//x$tab_content = $tab_content_field_object['value'];
 		$tab_content = get_field('common_tab', $codeproduct_array->ID, false);
@@ -226,7 +197,6 @@ class WCT {
 		
 		$tab_content = get_field($tab_code, $codeproduct_array->ID, false);
 		$tab_content = apply_filters('the_content', $tab_content ); //process shortcodes
-		$tab_content = apply_filters ('wct_woocommerce_tab_content', $tab_content, $tab_code);
 		echo $tab_content;
 		
 	}
@@ -261,7 +231,6 @@ class WCT {
 			'has_archive' => false,
 			);
 		
-		$register_post_type_array = apply_filters ('wct_register_post_type_array', $register_post_type_array);
 		register_post_type	( 'product_tabpage', $register_post_type_array );
 		
 	}	
@@ -374,7 +343,6 @@ class WCT {
 						);
 		}
 	
-		$fields_array = apply_filters ('wct_product_fields', $fields_array);
 		if ( !empty($fields_array)) {
 
 			if(function_exists("register_field_group"))
@@ -403,7 +371,6 @@ class WCT {
 					'menu_order' => 0,
 				);
 				
-				$register_field_group_array = apply_filters('wct_register_tabcontent_wysiwyg_edit_field_group_array', $register_field_group_array);
 				register_field_group ($register_field_group_array);
 				
 			}
@@ -476,7 +443,6 @@ class WCT {
 				'menu_order' => 0,
 			);
 			
-			$register_field_group_array = apply_filters('wct_register_product_tab_post_type_priority_field_group_array', $register_field_group_array);
 			register_field_group ($register_field_group_array);
 			
 		}

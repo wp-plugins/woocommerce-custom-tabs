@@ -4,9 +4,9 @@ Donate link: http://webshoplogic.com/donation-woocommerce-custom-tabs/
 Tags: Product tab, Woocommerce product tabs, Custom tab, WooCommerce
 Requires at least: 3.7
 Tested up to: 3.9.1
-Stable tag: 1.0.8 PRO
-License: codecanyon Regular License
-License URI: http://codecanyon.net/licenses/regular
+Stable tag: 1.0.8
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Custom product tab pages can be added to WooCommerce products using this plugin. 
 
 == Description ==
