@@ -3,13 +3,13 @@
 Plugin Name: Woocommerce Custom Tabs
 Plugin URI: http://webshoplogic.com/product/woocommerce-custom-tabs-lite/
 Description: Custom product tab pages can be added to WooCommerce products using this plugin.  
-Version: 1.0.6
+Version: 1.0.8 PRO
 Author: WebshopLogic
 Author URI: http://webshoplogic.com/
-License: GPLv2 or later
+License: codecanyon Regular License - http://codecanyon.net/licenses/regular
 Text Domain: wct
 Requires at least: 3.7
-Tested up to: 3.8.1
+Tested up to: 3.9.1
 */
 
 if ( ! class_exists( 'WCT' ) ) {
@@ -25,7 +25,7 @@ class WCT {
 		
 		global $is_premium;
 			
-		$is_premium = FALSE;
+		$is_premium = TRUE;
 		include_once( 'wct-admin-page.php' );
 		
 		add_action( 'init', array( $this, 'init' ), 0 );
@@ -37,31 +37,27 @@ class WCT {
 		
 		$options = get_option( 'wct_general_settings' );
 		
-		if (1==$options['enable_plugin']) {
-
-			if ( ! class_exists( 'Acf' ) ) {  //if ACF plugin is installed, it is not needed
-				
-				define( 'ACF_LITE', true ); //remove all visual interfaces of ACF plugin
-				include_once( 'advanced-custom-fields/acf.php' );
-
-			}			
+		if ( ! class_exists( 'Acf' ) ) {  //if ACF plugin is installed, it is not needed
 			
-			if ( ! class_exists( 'acf_field_wp_wysiwyg_plugin' ) ) {  //if acf_field_wp_wysiwyg_plugin plugin is installed, it is not needed
+			define( 'ACF_LITE', true ); //remove all visual interfaces of ACF plugin
+			include_once( 'advanced-custom-fields/acf.php' );
 
-				include_once('acf-wordpress-wysiwyg-field/acf-wp_wysiwyg.php' );
-			
-			}
-				
-			do_action( 'wct_init' );
+		}			
+		
+		if ( ! class_exists( 'acf_field_wp_wysiwyg_plugin' ) ) {  //if acf_field_wp_wysiwyg_plugin plugin is installed, it is not needed
 
+			include_once('acf-wordpress-wysiwyg-field/acf-wp_wysiwyg.php' );
+		
 		}
+			
+		do_action( 'wct_init' );
 
 	}
 
 	public function init() {
 
 
-		//load_plugin_textdomain( 'wct', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+		load_plugin_textdomain( 'wct', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 
 
 		global $is_premium, $wct_admin_page;
@@ -69,24 +65,20 @@ class WCT {
 
 		$options = get_option('wct_general_settings');
 
-		if ( 1 == $options['enable_plugin'] ) {
-				
-			if	( $is_premium or 1 == $options['enable_multiple_tabs_admin_test'] ) 
-				add_action( 'init', array( $this, 'create_product_tabpage_post_type' ));
+		if	( $is_premium or 1 == $options['enable_multiple_tabs_admin_test'] ) 
+			add_action( 'init', array( $this, 'create_product_tabpage_post_type' ));
 
-			if ( 1 == $options['enable_product_category_dependent_tabs'] ) {
-				add_action('init', array( $this, 'taxonomy_for_objet_types' ));
-			}
-			
-			add_filter( 'woocommerce_product_tabs', array($this, 'display_woocommerce_custom_tabs') );
-
-			add_action( 'admin_init', array( $this, 'register_tabcontent_wysiwyg_edit_field_group' )); //admin_init - product
-			add_action( 'admin_init', array( $this, 'register_product_tab_post_type_priority_field_group' )); //admin_init - tab 
-
-			do_action( 'wct_init', $this );
-
+		if ( 1 == $options['enable_product_category_dependent_tabs'] ) {
+			add_action('init', array( $this, 'taxonomy_for_objet_types' ));
 		}
 		
+		add_filter( 'woocommerce_product_tabs', array($this, 'display_woocommerce_custom_tabs') );
+
+		add_action( 'admin_init', array( $this, 'register_tabcontent_wysiwyg_edit_field_group' )); //admin_init - product
+		add_action( 'admin_init', array( $this, 'register_product_tab_post_type_priority_field_group' )); //admin_init - tab 
+
+		do_action( 'wct_init', $this );
+
 	}
 
 	function get_actual_product_related_tab_page_objects () { //$actual_post_id
@@ -173,6 +165,35 @@ class WCT {
 		
 		$codeproduct_array = get_post( null, OBJECT );
 		
+		$product_tabpage_postslist = $this->get_actual_product_related_tab_page_objects();
+		
+		//Original WooCommerce tabs priority: Description - 10,  Additional Information - 20,  Reviews - 30
+		foreach ($product_tabpage_postslist as $product_tabpage_post) {
+
+			//x$tab_content_field_object = get_field_object($product_tabpage_post -> post_name, $codeproduct_array->ID);
+			//x$tab_content = $tab_content_field_object['value'];
+			$tab_content = get_field($product_tabpage_post -> post_name, $codeproduct_array->ID, false);
+			
+			//x$tab_custom_title_field_object = get_field_object($product_tabpage_post -> post_name . '_tab_custom_title', $codeproduct_array->ID);
+			//x$tab_custom_title = $tab_custom_title_field_object['value'];
+			$tab_custom_title = get_field($product_tabpage_post -> post_name . '_tab_custom_title', $codeproduct_array->ID, false);
+
+			if ( !empty($tab_content) or 1 != $options['hide_empty_tabs']) {
+	
+				//x$priority_field_object = get_field_object('priority', $product_tabpage_post->ID);
+				//x$priority = $priority_field_object['value'];
+				$priority = get_field('priority', $product_tabpage_post->ID, false);
+	
+				//callback is a dynamic function, it is call $this->woocommerce_tab_content function with $tab_code parameter 			
+				$tabs[ $product_tabpage_post -> post_name ] = array(
+				'title' 	=> $tab_custom_title == '' ? $product_tabpage_post -> post_title : $tab_custom_title,
+				'priority' 	=> $priority,
+				'callback' 	=> create_function('',  'global $wct; $wct->woocommerce_tab_content("' . $product_tabpage_post -> post_name . '");'  ),
+				);
+			}			
+			
+		}
+
 		//x$tab_content_field_object = get_field_object('common_tab', $codeproduct_array->ID);
 		//x$tab_content = $tab_content_field_object['value'];
 		$tab_content = get_field('common_tab', $codeproduct_array->ID, false);
@@ -205,6 +226,7 @@ class WCT {
 		
 		$tab_content = get_field($tab_code, $codeproduct_array->ID, false);
 		$tab_content = apply_filters('the_content', $tab_content ); //process shortcodes
+		$tab_content = apply_filters ('wct_woocommerce_tab_content', $tab_content, $tab_code);
 		echo $tab_content;
 		
 	}
@@ -239,6 +261,7 @@ class WCT {
 			'has_archive' => false,
 			);
 		
+		$register_post_type_array = apply_filters ('wct_register_post_type_array', $register_post_type_array);
 		register_post_type	( 'product_tabpage', $register_post_type_array );
 		
 	}	
@@ -351,6 +374,7 @@ class WCT {
 						);
 		}
 	
+		$fields_array = apply_filters ('wct_product_fields', $fields_array);
 		if ( !empty($fields_array)) {
 
 			if(function_exists("register_field_group"))
@@ -379,6 +403,7 @@ class WCT {
 					'menu_order' => 0,
 				);
 				
+				$register_field_group_array = apply_filters('wct_register_tabcontent_wysiwyg_edit_field_group_array', $register_field_group_array);
 				register_field_group ($register_field_group_array);
 				
 			}
@@ -451,6 +476,7 @@ class WCT {
 				'menu_order' => 0,
 			);
 			
+			$register_field_group_array = apply_filters('wct_register_product_tab_post_type_priority_field_group_array', $register_field_group_array);
 			register_field_group ($register_field_group_array);
 			
 		}
@@ -470,7 +496,7 @@ class WCT {
 
 	//disable plugin update notice (in PRO)
 	function filter_plugin_updates( $value ) {
-		if($value->response[ plugin_basename(__FILE__) ]) 
+		if(isset($value->response[ plugin_basename(__FILE__) ])) 
 			unset($value->response[ plugin_basename(__FILE__) ]);	    
 	    return $value;
 	}	

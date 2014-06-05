@@ -38,16 +38,6 @@ class WCT_Admin_Page {
 			'wct_general_settings' // Page / tab page
 		);
 		
-		//add_settings_field( $id, $title, $callback, $page, $section, $args );
-		add_settings_field(
-			'enable_plugin', // ID
-			__('Enable WooCommerce Custom Tabs Plugin','wct'), // Title 
-			array($this, 'posttype_callback'), // Callback
-			'wct_general_settings', // Page / tab page
-			'wct_general_section' // Section           
-		);
-
-		
 		add_settings_field(
 			'enable_product_category_dependent_tabs', // ID
 			__('Enable product category dependent product tab pages (PRO)','wct'), // Title 
@@ -80,13 +70,6 @@ class WCT_Admin_Page {
 			'wct_general_section' // Section           
 		);
 
-		add_settings_field(
-			'enable_multiple_tabs_admin_test', // ID
-			__('Enable multiple tabpage administration test','wct'), // Title 
-			array($this, 'posttype_callback'), // Callback
-			'wct_general_settings', // Page / tab page
-			'wct_general_section' // Section           
-		);
 		}
 
 	function wct_set_defaults() {
@@ -94,12 +77,11 @@ class WCT_Admin_Page {
 		$options = get_option( 'wct_general_settings' ); 
 		
 		$options = wp_parse_args( $options, array(
-			'enable_plugin' => '0',
-			'enable_product_category_dependent_tabs' => 0,
+			'enable_product_category_dependent_tabs' => 1,
 			'common_tabname' => '',
 			'common_tab_priority' => 30,
 			'hide_empty_tabs' => 0,
-			'enable_multiple_tabs_admin_test' => 1,
+			'enable_multiple_tabs_admin_test' => 0,
 		) );
 		update_option( 'wct_general_settings', $options );
 		
@@ -138,19 +120,6 @@ class WCT_Admin_Page {
 		
 					<table class="form-table">
 		
-						<tr valign="top">
-							<th scope="row"><?php echo __('Enable WooCommerce Custom Tabs Plugin','wct') . ':' ?></th>
-							<td>
-								<?php
-								printf(
-									'<input type="hidden" name="wct_general_settings[enable_plugin]" value="0"/>
-									<input type="checkbox" id="enable_plugin" name="wct_general_settings[enable_plugin]"
-									value="1"' . checked( 1, esc_attr( $options['enable_plugin']), false ) . ' />'
-								);
-								?>    
-							</td>
-						</tr>							
-
 						<tr valign="top">
 							<th scope="row"><?php echo __('Hide empty tabs','wct') . ':' ?></th>
 							<td>
@@ -254,14 +223,6 @@ class WCT_Admin_Page {
 						a.wli_pro:active {color: black; text-decoration:none;}
 					</style>
 		
-					<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-					<input type="hidden" name="cmd" value="_s-xclick">
-					<input type="hidden" name="hosted_button_id" value="STA4D2ZMVGNBN">
-					<input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online.">
-					<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-					</form>					
-					<hr>
-					
 					<a href="http://webshoplogic.com/products/" class="wli_pro" target="_blank">
 						<h2><?php _e('Try out WooCommerce Custom Tabs Pro', 'wct'); ?></h2>
 					</a>							

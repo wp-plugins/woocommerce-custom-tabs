@@ -3,10 +3,10 @@ Contributors: WebshopLogic
 Donate link: http://webshoplogic.com/donation-woocommerce-custom-tabs/
 Tags: Product tab, Woocommerce product tabs, Custom tab, WooCommerce
 Requires at least: 3.7
-Tested up to: 3.8.1
-Stable tag: 1.0.6
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tested up to: 3.9.1
+Stable tag: 1.0.8 PRO
+License: codecanyon Regular License
+License URI: http://codecanyon.net/licenses/regular
 Custom product tab pages can be added to WooCommerce products using this plugin. 
 
 == Description ==
@@ -27,6 +27,9 @@ As a good shop owner, you may want to publish more information about your produc
 * Product category dependent tab pages
 * More Actrions and Filters for customization
 
+= Available languages =
+* English
+* Chinese - translated by Janfeng Lee
 
 Pro version Plugin Page: http://webshoplogic.com/product/woocommerce-custom-tabs-pro/
 Author website: http://webshoplogic.com/
@@ -58,6 +61,14 @@ Based on a work at http://www.flickr.com/photos/sfllaw/10856709/in/photostream/
 
 
 == Changelog ==
+
+= 1.0.8 =
+* add: load plugin textdomain
+* Chinese language version
+* Remove enable plugin checkbox in admin panel
+
+= 1.0.7 =
+* fix: other problem of disabling wordpress.org update for PRO version
 
 = 1.0.6 =
 * fix: unnecessary BR tags in tab contents
