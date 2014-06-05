@@ -3,7 +3,7 @@
 Plugin Name: Woocommerce Custom Tabs
 Plugin URI: http://webshoplogic.com/product/woocommerce-custom-tabs-lite/
 Description: Custom product tab pages can be added to WooCommerce products using this plugin.  
-Version: 1.0.8
+Version: 1.0.9
 Author: WebshopLogic
 Author URI: http://webshoplogic.com/
 License: GPLv2 or later
