@@ -31,7 +31,8 @@ As a good shop owner, you may want to publish more information about your produc
 * English
 * Chinese - translated by Janfeng Lee
 
-Pro version Plugin Page: http://webshoplogic.com/product/woocommerce-custom-tabs-pro/
+Pro version Plugin Page: http://webshoplogic.com/product/woocommerce-custom-tabs-pro-plugin/
+More details and documentation of Lite version: http://webshoplogic.com/product/woocommerce-custom-tabs-lite-plugin/
 Author website: http://webshoplogic.com/
 
 Banner picture background: Pop-tab mail by Simon Law is licensed under a Creative Commons Attribution 2.0 International License.
