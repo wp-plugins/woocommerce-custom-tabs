@@ -3,7 +3,7 @@
 Plugin Name: Woocommerce Custom Tabs
 Plugin URI: http://webshoplogic.com/product/woocommerce-custom-tabs-lite/
 Description: Custom product tab pages can be added to WooCommerce products using this plugin.  
-Version: 1.0.8
+Version: 1.0.9
 Author: WebshopLogic
 Author URI: http://webshoplogic.com/
 License: GPLv2 or later
@@ -120,8 +120,18 @@ class WCT {
 		if ( 1 == $options['enable_product_category_dependent_tabs'] ) {
 
 			//in case of admin page global $post variable can't be used, so $_GET['post] is available   
-			$post_id = intval( $post->id != null ? $post->id : $_GET['post'] );
-					
+			//$post_id = intval( $post->id != null ? $post->id : $_GET['post'] );
+			
+			$post_id = null;
+			
+			if (isset($post->id))
+				if ($post->id != null)
+					$post_id = intval( $post->id );
+			
+			if ($post_id == null and isset( $_GET['post'] ))		
+				$post_id = intval( $_GET['post'] );
+
+			
 			//get product categories of actual product
 			$actual_product_categories = get_the_terms( $post_id, 'product_cat');
 			
@@ -172,7 +182,7 @@ class WCT {
 		//x$tab_custom_title_field_object = get_field_object('common_tab_tab_custom_title', $codeproduct_array->ID);
 		//x$tab_custom_title = $tab_custom_title_field_object['value'];
 		$tab_custom_title = get_field('common_tab_tab_custom_title', $codeproduct_array->ID, false);
-
+		
 		if ( !empty($tab_content) or 1 != $options['hide_empty_tabs'] ) {
 			
 			if ($options['common_tabname'] != '') { //if common tabname is set, then this tab has to be displayed
@@ -189,13 +199,32 @@ class WCT {
 		return $tabs;
 	}
 
-	function woocommerce_tab_content($tab_code = 'common_tab') {
+	function woocommerce_tab_content($tab_code = 'common_tab' , $product_tabpage_post_ID = null ) {
 
 		//$tab_code is iqual field name of the current product post field name that is to be written to this tab page as content
 		
 		$codeproduct_array = get_post( null, OBJECT );
 		
 		$tab_content = get_field($tab_code, $codeproduct_array->ID, false);
+
+		if ($tab_code != 'common_tab') {
+	
+			$content_header = get_field('content_header', $product_tabpage_post_ID, false);
+			$content_footer = get_field('content_footer', $product_tabpage_post_ID, false);
+			$default_content = get_field('default_content', $product_tabpage_post_ID, false);
+			
+			if ($tab_content != null) {
+				$tab_content = $content_header . ($content_header == null ? null : chr(13)) . 
+								$tab_content . 
+								($content_footer == null ? null : chr(13)) . $content_footer;
+	
+			} else {
+	
+				$tab_content = $default_content;
+	
+			}
+		}
+		
 		$tab_content = apply_filters('the_content', $tab_content ); //process shortcodes
 		echo $tab_content;
 		
@@ -410,7 +439,39 @@ class WCT {
 						'max' => '',
 						'step' => '',
 					),
-
+					array (
+						'key' => 'default_content',
+						'label' => __('Default Content', 'wct'),
+						'name' => 'default_content',
+						'type' => 'wp_wysiwyg',
+						'instructions' => __('The content entered here will be displayed in case of products where no content is given.', 'wct'),
+						'default_value' => '',
+						'teeny' => 0,
+						'media_buttons' => 1,
+						'dfw' => 1,
+					),
+					array (
+						'key' => 'content_header',
+						'label' => __('Content Header', 'wct'),
+						'name' => 'content_header',
+						'type' => 'wp_wysiwyg',
+						'instructions' => __('The content entered here will be displayed before the tab content entered for a specific product. If no tab content entered for a specific product, this header will not be displayed either.', 'wct'),
+						'default_value' => '',
+						'teeny' => 0,
+						'media_buttons' => 1,
+						'dfw' => 1,
+					),					
+					array (
+						'key' => 'content_footer',
+						'label' => __('Content Footer', 'wct'),
+						'name' => 'content_footer',
+						'type' => 'wp_wysiwyg',
+						'instructions' => __('The content entered here will be displayed after the tab content entered for a specific product. If no tab content entered for a specific product, this footer will not be displayed either.', 'wct'),
+						'default_value' => '',
+						'teeny' => 0,
+						'media_buttons' => 1,
+						'dfw' => 1,
+					),					
 				),
 				'location' => array (
 					array (

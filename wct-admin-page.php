@@ -257,11 +257,6 @@ class WCT_Admin_Page {
 	
 	function sanitize( $input )
 	{
-		if( !is_numeric( $input['id_number'] ) )
-			$input['id_number'] = '';  
-	
-		if( !empty( $input['title'] ) )
-			$input['title'] = sanitize_text_field( $input['title'] );
 	
 		return $input;
 	}

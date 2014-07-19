@@ -4,7 +4,7 @@ Donate link: http://webshoplogic.com/donation-woocommerce-custom-tabs/
 Tags: Product tab, Woocommerce product tabs, Custom tab, WooCommerce
 Requires at least: 3.7
 Tested up to: 3.9.1
-Stable tag: 1.0.8
+Stable tag: 1.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Custom product tab pages can be added to WooCommerce products using this plugin. 
@@ -26,6 +26,7 @@ As a good shop owner, you may want to publish more information about your produc
 * Pre register tabs, this way you can make standardised tabs for a bunch of products 
 * Product category dependent tab pages
 * More Actrions and Filters for customization
+* Tab type default content, tab type content header, tab type content footer
 
 = Available languages =
 * English
@@ -62,6 +63,13 @@ Based on a work at http://www.flickr.com/photos/sfllaw/10856709/in/photostream/
 
 
 == Changelog ==
+
+= 1.0.9 =
+* New feature: Tab type default content, tab type content header, tab type content footer
+* fix: delete unnecessary rows from sanitize function
+* fix: empty $post->id problem in get_actual_product_related_tab_page_objects
+* fix: wct_product_fields filter problem if no tabtype is defined at all
+* actualized readme
 
 = 1.0.8 =
 * add: load plugin textdomain
