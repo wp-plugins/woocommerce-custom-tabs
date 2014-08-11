@@ -47,6 +47,14 @@ class WCT_Admin_Page {
 		);
 
 		add_settings_field(
+			'disable_sub_category_display', // ID
+			__('Disable sub category display (PRO)','wct'), // Title 
+			array($this, 'posttype_callback'), // Callback
+			'wct_general_settings', // Page / tab page
+			'wct_general_section' // Section           
+		);
+
+		add_settings_field(
 			'hide_empty_tabs', // ID
 			__('Hide empty tabs','wct'), // Title 
 			array($this, 'posttype_callback'), // Callback
@@ -85,6 +93,7 @@ class WCT_Admin_Page {
 		
 		$options = wp_parse_args( $options, array(
 			'enable_product_category_dependent_tabs' => 0,
+			'disable_sub_category_display' => 0,
 			'common_tabname' => '',
 			'common_tab_priority' => 30,
 			'hide_empty_tabs' => 0,
@@ -153,6 +162,21 @@ class WCT_Admin_Page {
 									value="1"' . checked( 1, esc_attr( $options['enable_product_category_dependent_tabs']), false ) . ' />'
 								);
 								echo '<br /><span class="description">' . __('There are two custom tab types. One of them is visible on all products, the other tab type is displayed only if you assign it to a product category, and the actually displayed product has this category. You can turn on/off this second type of functionality using this checkbox. The other settings can be made in Product Tabs menu.','wct') . '</span>';
+								if (!$is_premium) 
+									echo '<br /><span class="description">' . __('These functionality available in Pro version, and you can test administration of tab pages if you turn on testing of multiple tab administration option in lite version below.','wct') . '</span>';								?>    
+							</td>
+						</tr>
+
+						<tr valign="top">
+							<th scope="row"><?php echo __('Disable sub category display (PRO)','wct') . ':' ?></th>
+							<td>
+								<?php
+								printf(
+									'<input type="hidden" name="wct_general_settings[disable_sub_category_display]" value="0"/>
+									<input type="checkbox" id="disable_sub_category_display" name="wct_general_settings[disable_sub_category_display]"
+									value="1"' . checked( 1, esc_attr( $options['disable_sub_category_display']), false ) . ' />'
+								);
+								echo '<br /><span class="description">' . __('Do not display tabs assigned to a product sub category, if the main category is not set for the product.','wct') . '</span>';
 								if (!$is_premium) 
 									echo '<br /><span class="description">' . __('These functionality available in Pro version, and you can test administration of tab pages if you turn on testing of multiple tab administration option in lite version below.','wct') . '</span>';								?>    
 							</td>

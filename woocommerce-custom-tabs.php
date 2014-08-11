@@ -3,7 +3,7 @@
 Plugin Name: Woocommerce Custom Tabs
 Plugin URI: http://webshoplogic.com/product/woocommerce-custom-tabs-lite/
 Description: Custom product tab pages can be added to WooCommerce products using this plugin.  
-Version: 1.0.10
+Version: 1.0.11
 Author: WebshopLogic
 Author URI: http://webshoplogic.com/
 License: GPLv2 or later
@@ -143,14 +143,24 @@ class WCT {
 			if ( ! is_array( $actual_product_categories ) )
 				$actual_product_categories = array();
 			
+			if (1 == $options['disable_sub_category_display']) {
+				$include_children = false;
+			} else {
+				$include_children = true;
+			}
+
+			//create an array for product category ids 
+			$actual_product_category_ids = array();
 			foreach ($actual_product_categories as $actual_product_object) {
-				$tax_query_array[] =	array(
+				$actual_product_category_ids[] = intval( $actual_product_object -> term_id );
+			}	
+
+			$tax_query_array[] = array(
 						'taxonomy' => 'product_cat',
 						'field' => 'id',
-						'terms' => intval( $actual_product_object -> term_id ),
-					);
-				
-			}
+						'terms' => $actual_product_category_ids,
+						'include_children' => $include_children, //if false, the tab category is 1.1 and 1.2 then the product will not be displayed that has the 1 category
+			);
 			
 			$args = array(
 				'post_type' => 'product_tabpage',
@@ -158,7 +168,7 @@ class WCT {
 			);
 	
 			$product_tabpage_postslist_2 = get_posts( $args );
-		
+
 		}
 
 		//merge the two arrays (always usable and category dependent tab pages)
