@@ -3,8 +3,8 @@ Contributors: WebshopLogic
 Donate link: http://webshoplogic.com/donation-woocommerce-custom-tabs/
 Tags: Product tab, Woocommerce product tabs, Custom tab, WooCommerce
 Requires at least: 3.7
-Tested up to: 3.9.1
-Stable tag: 1.0.11
+Tested up to: 4.1
+Stable tag: 1.0.16
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Custom product tab pages can be added to WooCommerce products using this plugin. 
@@ -68,6 +68,22 @@ Based on a work at http://www.flickr.com/photos/sfllaw/10856709/in/photostream/
 
 
 == Changelog ==
+
+= 1.0.16 =
+* modified: new acf version
+
+= 1.0.15 =
+* fix: Only five category dependent tab appeard
+* new feature: ordered tab fields on edit product admin page
+
+= 1.0.14 =
+* fix: Inside page anchor link to a tab problem
+
+= 1.0.13 =
+* new feature: direct link to a tab
+
+= 1.0.12 =
+* fix: save tab content problem
 
 = 1.0.11 =
 * fix: performance problem about category search

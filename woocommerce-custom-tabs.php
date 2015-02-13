@@ -3,15 +3,31 @@
 Plugin Name: Woocommerce Custom Tabs
 Plugin URI: http://webshoplogic.com/product/woocommerce-custom-tabs-lite/
 Description: Custom product tab pages can be added to WooCommerce products using this plugin.  
-Version: 1.0.11
+Version: 1.0.16
 Author: WebshopLogic
 Author URI: http://webshoplogic.com/
 License: GPLv2 or later
 Text Domain: wct
 Requires at least: 3.7
-Tested up to: 3.9.1
+Tested up to: 4.1
 */
 
+/*  Copyright 2014 Peter Rath WebshopLogic
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
 if ( ! class_exists( 'WCT' ) ) {
 
 class WCT {
@@ -49,13 +65,12 @@ class WCT {
 			include_once('acf-wordpress-wysiwyg-field/acf-wp_wysiwyg.php' );
 		
 		}
-			
+
 		do_action( 'wct_init' );
 
 	}
 
 	public function init() {
-
 
 		load_plugin_textdomain( 'wct', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 
@@ -91,7 +106,8 @@ class WCT {
 			'posts_per_page' => 1000,			
 			'meta_key'	=> 'priority',
 			'orderby'	=> 'meta_value_name',
-			'order'		=> 'ASC'
+			'order'		=> 'ASC',
+			'posts_per_page' => -1
 		);
 
 		$product_tabpage_postslist_1 = get_posts( $args );
@@ -131,6 +147,11 @@ class WCT {
 			if ($post_id == null and isset( $_GET['post'] ))		
 				$post_id = intval( $_GET['post'] );
 
+			if ($post_id == null and isset( $_POST['post_id'] ))		
+				$post_id = intval( $_POST['post_id'] );
+
+			if ($post_id == null and isset( $_POST['post_ID'] ))		
+				$post_id = intval( $_POST['post_ID'] );
 			
 			//get product categories of actual product
 			$actual_product_categories = get_the_terms( $post_id, 'product_cat');
@@ -138,7 +159,7 @@ class WCT {
 			//qery product tab pages custom posts that has common product category with the actual product
 			//create tax_query_array
 			$tax_query_array = array();
-			$tax_query_array['relation'] = 'OR';
+			//$tax_query_array['relation'] = 'OR';
 			
 			if ( ! is_array( $actual_product_categories ) )
 				$actual_product_categories = array();
@@ -164,7 +185,8 @@ class WCT {
 			
 			$args = array(
 				'post_type' => 'product_tabpage',
-				'tax_query' => $tax_query_array, 
+				'tax_query' => $tax_query_array,
+				'posts_per_page' => -1 
 			);
 	
 			$product_tabpage_postslist_2 = get_posts( $args );
@@ -175,6 +197,22 @@ class WCT {
 		$product_tabpage_postslist = array_unique ( array_merge ( $product_tabpage_postslist_1, $product_tabpage_postslist_2 ), SORT_REGULAR);
 			//array_unique works with an array of objects using SORT_REGULAR:
 
+		//put priority into the objects in the array
+		foreach ($product_tabpage_postslist as $key => $product_tabpage) {
+			
+			$priority = get_field('priority', $product_tabpage->ID, false);
+			$product_tabpage->priority = $priority;
+			
+			$product_tabpage_postslist[$key] = $product_tabpage;
+			
+		}
+
+		//sort array of objects by priority object attribute
+		usort($product_tabpage_postslist, function($a, $b)
+		{
+		    return intval($a->priority) - intval($b->priority);
+		});
+			
 		return apply_filters( 'product_tabpage_postslist', $product_tabpage_postslist );
 	
 	}
@@ -519,7 +557,6 @@ class WCT {
 		}
 	}	
 
-	
 	public function plugin_path() {
 		if ( $this->plugin_path ) return $this->plugin_path;
 
